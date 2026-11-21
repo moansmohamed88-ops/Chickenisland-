@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>تشيكن آيلاند — نموذج أولي</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#f6efe2;--card:#fffdf8;--tx:#221c17;--mut:#7a6e61;--red:#d92b1f;--gold:#f2b21b;--ink:#1f1a16;--bd:#e6dac6;--ok:#1d8a4a;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15110e;--card:#211b16;--tx:#f5ede2;--mut:#a99c8c;--bd:#382e25;--ink:#0e0b09;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#15110e;--card:#211b16;--tx:#f5ede2;--mut:#a99c8c;--bd:#382e25;--ink:#0e0b09;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 Tahoma,"Segoe UI",system-ui,sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:12px 14px 40px}
+.top{background:var(--ink);color:#fff;border-radius:16px;padding:14px 16px;display:flex;align-items:center;gap:12px;border-bottom:4px solid var(--red)}
+.top h1{margin:0;font-size:22px;font-weight:800;color:var(--gold)}
+.top small{color:#d8cdbd}
+.tabs{display:flex;gap:8px;margin:12px 0}
+.tabs button{flex:1}
+button{font:inherit;border:0;border-radius:12px;padding:11px 14px;background:var(--bd);color:var(--tx);cursor:pointer;font-weight:700}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+button.on{background:var(--ink);color:var(--gold)}
+button.p{background:var(--red);color:#fff}
+button.g{background:var(--ok);color:#fff}
+button.sm{padding:6px 12px;border-radius:10px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:16px;margin-bottom:12px}
+h2{font-size:19px;margin:0 0 6px}
+h3{font-size:16px;margin:0 0 8px}
+.m{color:var(--mut);margin:0 0 12px;font-size:14px}
+.badge{margin-inline-start:auto;background:var(--ok);color:#fff;border-radius:99px;padding:2px 12px;font-size:13px}
+.row{display:flex;align-items:center;gap:10px}
+.opts{display:flex;gap:8px;margin:10px 0}
+.opts button{flex:1}
+input,textarea,select{width:100%;font:inherit;padding:10px 12px;border-radius:10px;border:1px solid var(--bd);background:var(--bg);color:var(--tx);margin:4px 0 8px}
+label{font-size:14px;color:var(--mut)}
+.big{width:100%;padding:14px;font-size:18px}
+.stat{text-align:center;padding:10px 0}
+.stat .tm{font-size:30px;font-weight:800;direction:ltr;display:block}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:6px}
+.chips button{white-space:nowrap;padding:7px 12px}
+.items{display:grid;gap:6px}
+.it{display:flex;align-items:center;gap:8px;padding:8px 10px;border:1px solid var(--bd);border-radius:10px}
+.it span{flex:1}
+.it b{color:var(--red)}
+.q{display:flex;align-items:center;gap:6px}
+.q button{width:32px;height:32px;padding:0;border-radius:99px}
+.q i{min-width:18px;text-align:center;font-style:normal;font-weight:700}
+.sum{display:flex;justify-content:space-between;font-weight:800;font-size:18px;margin:10px 0}
+.ord{border-inline-start:5px solid var(--gold)}
+.ord.s2{border-color:var(--ok)}
+.ord.s3{opacity:.6}
+.tag{font-size:13px;background:var(--gold);color:#221c17;border-radius:99px;padding:1px 10px;font-weight:700}
+.note{font-size:13px;color:var(--mut);text-align:center;margin-top:14px}
+.ring{animation:r 1s infinite}
+@keyframes r{50%{opacity:.4}}
+@media (prefers-reduced-motion:reduce){.ring{animation:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top"><div style="font-size:34px">🍗</div><div><h1>تشيكن آيلاند</h1><small>Fried Chicken &amp; Burger</small></div></div>
+  <div class="tabs"><button id="tc" onclick="V('c')">واجهة العميل</button><button id="td" onclick="V('d')">لوحة المطعم</button></div>
+  <div id="app"></div>
+  <p class="note">نموذج أولي: المكالمة محاكاة بدون صوت فعلي.</p>
+</div>
+<script>
+const M=[
+["برجر",[["كرانشي راب سبايسي",85],["كرانشي راب عادي",85],["زنجر هالبينو",115],["زنجر سوبريم",120],["زنجر مدخن",120],["تشيكن ديتش",140],["تشيكن باستر",115,180],["تشيكن موتزاريلا ستيك",115,180],["تشيكن رانش",115,180],["تشيز لافر",115,180],["تشيكن كلاسيك آيلاند",115,180],["تشيكن فاير آيلاند",115,180],["تشيكن بيكون",130,190]]],
+["وجبات فردية",[["سناك بوكس (2 قطعة)",105],["دينر بوكس (3 قطع)",150],["لارج بوكس (4 قطع)",195],["لارج بوكس إكسترا (5 قطع)",240],["إكسترا تشيكن آيلاند (6 قطع)",280],["إستربس بوكس (3)",110],["جامبو إستربس بوكس (5)",170],["سوبر إستربس بوكس (10)",310],["ميكس تشيكن آيلاند",175],["وجبة جناح (1) - 3 أجنحة",80],["وجبة جناح (2) - 5 أجنحة",120]]],
+["عائلية",[["فاميلي (9 قطع)",400],["سوبر فاميلي (12 قطعة)",520],["إسبيشيال (15 قطعة)",650],["جامبو (20 قطعة)",800],["جامبو إستربس مخلية (15)",450],["ميجا إستربس مخلية (20)",550]]],
+["قطع مختارة",[["قطعة صدر",80],["قطعة فخذ",70],["قطعة كيلة",65],["قطعة دبوس",50],["قطعة إستربس",45],["قطعة جناح",30],["تبديل الجناح بصدر",50],["تبديل الجناح بفخذ",45],["تبديل الجناح بدبوس",25],["تبديل فخذ بصدر",20]]],
+["ريزو",[["ريزو تشيكن كلاسيك",85],["ريزو تشيكن فاير",85],["ريزو",35]]],
+["إضافات",[["بطاطس",35],["بطاطس صوص شيدر",50],["بطاطس تشيكن",70],["صوص فاير",25],["صوص رانش",30],["كول سلو",15],["إضافة خبز",3],["3 قطع موتزاريلا ستيك",50],["هالبينو",25],["صوص آيلاند مميز",25],["صوص جبنة شيدر",35],["ثومية",10]]],
+["مشروبات",[["في كولا",25],["ماكسي كولا لتر",25],["ماكسي كولا",15],["مياه",10]]]
+];
+const L=M.map((c,ci)=>[c[0],c[1].flatMap((x,i)=>x.length>2?[{id:ci+"_"+i+"a",n:x[0]+" سنجل",p:x[1]},{id:ci+"_"+i+"b",n:x[0]+" دبل",p:x[2]}]:[{id:ci+"_"+i,n:x[0],p:x[1]}])]);
+const IT={};L.forEach(c=>c[1].forEach(i=>IT[i.id]=i));
+const ST=["جديد","قيد التحضير","جاهز","تم التسليم"];
+const S={v:"c",call:"idle",t:0,topic:"طلب أوردر",cn:"",note:"",cat:0,cart:{},orders:[],f:{name:"",phone:"",addr:"",pay:"كاش"}};
+const $=id=>document.getElementById(id);
+const E=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const tot=()=>Object.entries(S.cart).reduce((a,[k,q])=>a+IT[k].p*q,0);
+function V(v){S.v=v;R()}
+function R(){
+  $("tc").className=S.v=="c"?"on":"";$("td").className=S.v=="d"?"on":"";
+  $("app").innerHTML=S.v=="c"?C():D();
+}
+function C(){
+  const c=S.call;let b;
+  if(c=="ringing")b=`<div class="stat"><div class="ring" style="font-size:40px">📞</div><h3>جاري الاتصال… بانتظار رد المطعم</h3><button class="p" onclick="end()">إلغاء</button> <button onclick="V('d')">افتح لوحة المطعم للرد</button></div>`;
+  else if(c=="connected")b=`<div class="stat"><div style="font-size:40px">🟢</div><h3>أنت الآن على الخط مع المطعم</h3><span class="tm">${fmt(S.t)}</span><button class="p" onclick="end()">إنهاء المكالمة</button></div>`;
+  else b=(c=="ended"?`<p class="m">انتهت المكالمة. يمكنك الاتصال مرة أخرى.</p>`:"")+
+  `<label>ما موضوع المكالمة؟</label><div class="opts">${["طلب أوردر","استفسار"].map(x=>`<button class="${S.topic==x?"on":""}" onclick="S.topic='${x}';R()">${x}</button>`).join("")}</div>
+  <label>اسمك (اختياري)</label><input value="${E(S.cn)}" oninput="S.cn=this.value">
+  <label>كيف يمكننا مساعدتك؟ (اختياري)</label><textarea rows="2" oninput="S.note=this.value">${E(S.note)}</textarea>
+  <button class="p big" onclick="start()">ابدأ المكالمة</button><p class="m" style="margin:8px 0 0">نحتاج إذن الميكروفون لبدء المكالمة. قد تُسجَّل المكالمة لأغراض الجودة والدعم.</p>`;
+  return `<section class="card"><div class="row"><h2 style="margin:0">تحدّث إلينا — نردّ خلال ثوانٍ</h2><span class="badge">مفتوح</span></div><p class="m">اختر ما تحتاجه وابدأ المكالمة من متصفحك مباشرةً، بلا تطبيق وبلا رقم هاتف.</p>${b}</section>`;
+}
+function D(){
+  const c=S.call;let cb;
+  if(c=="ringing")cb=`<div class="stat"><div class="ring" style="font-size:36px">📞</div><h3>مكالمة واردة: ${E(S.cn||"عميل")}</h3><p class="m">${E(S.topic)}${S.note?" — "+E(S.note):""}</p><button class="g" onclick="answer()">رد على المكالمة</button></div>`;
+  else if(c=="connected")cb=`<div class="row"><span>🟢 متصل مع ${E(S.cn||"عميل")}</span><span class="tm" style="margin-inline-start:auto;direction:ltr;font-weight:800">${fmt(S.t)}</span><button class="p sm" onclick="end()">إنهاء</button></div>`;
+  else cb=`<p class="m" style="margin:0">لا توجد مكالمات واردة. جرّب بدء مكالمة من تبويب واجهة العميل.</p>`;
+  const n=Object.keys(S.cart).length;
+  const cartRows=Object.entries(S.cart).map(([k,q])=>`<div class="it"><span>${E(IT[k].n)}</span><b>${IT[k].p*q}</b></div>`).join("");
+  return `<section class="card"><h3>المكالمات</h3>${cb}</section>
+  <section class="card"><h3>تسجيل أوردر</h3>
+  <div class="chips">${L.map((c,i)=>`<button class="${S.cat==i?"on":""}" onclick="S.cat=${i};R()">${c[0]}</button>`).join("")}</div>
+  <div class="items">${L[S.cat][1].map(i=>`<div class="it"><span>${E(i.n)}</span><b>${i.p}</b><div class="q"><button onclick="add('${i.id}',-1)">−</button><i>${S.cart[i.id]||0}</i><button onclick="add('${i.id}',1)">+</button></div></div>`).join("")}</div>
+  ${n?`<h3 style="margin-top:14px">الطلب</h3>${cartRows}<div class="sum"><span>الإجمالي</span><span>${tot()} ج.م</span></div>`:`<p class="m" style="margin-top:10px">اختر أصنافًا من القائمة لبدء الأوردر.</p>`}
+  <label>اسم العميل</label><input value="${E(S.f.name)}" oninput="S.f.name=this.value">
+  <label>رقم الموبايل</label><input inputmode="tel" value="${E(S.f.phone)}" oninput="S.f.phone=this.value">
+  <label>العنوان</label><textarea rows="2" oninput="S.f.addr=this.value">${E(S.f.addr)}</textarea>
+  <label>الدفع</label><select onchange="S.f.pay=this.value">${["كاش","فودافون كاش","فيزا عند التسليم"].map(x=>`<option${S.f.pay==x?" selected":""}>${x}</option>`).join("")}</select>
+  <button class="p big" onclick="save()">حفظ الأوردر</button></section>
+  <section class="card"><h3>الأوردرات (${S.orders.length})</h3>${S.orders.length?S.orders.map((o,i)=>`<div class="card ord s${o.s}" style="margin:8px 0"><div class="row"><b>#${o.no} ${E(o.name||"بدون اسم")}</b><span class="tag" style="margin-inline-start:auto">${ST[o.s]}</span></div>
+  <div class="m" style="margin:4px 0">${o.items.map(x=>E(x)).join("، ")}</div><div class="m" style="margin:0">${E(o.phone)} ${E(o.addr)} — ${E(o.pay)}</div>
+  <div class="row" style="margin-top:8px"><b>${o.total} ج.م</b>${o.s<3?`<button class="g sm" style="margin-inline-start:auto" onclick="adv(${i})">← ${ST[o.s+1]}</button>`:""}</div></div>`).join(""):`<p class="m" style="margin:0">لا توجد أوردرات بعد. سجّل أول أوردر من النموذج أعلاه.</p>`}</section>`;
+}
+const fmt=t=>String(Math.floor(t/60)).padStart(2,"0")+":"+String(t%60).padStart(2,"0");
+function start(){S.call="ringing";R()}
+function answer(){S.call="connected";S.t=0;if(!S.f.name)S.f.name=S.cn;R()}
+function end(){S.call=S.call=="idle"?"idle":"ended";R()}
+function add(id,d){const q=(S.cart[id]||0)+d;if(q<=0)delete S.cart[id];else S.cart[id]=q;R()}
+function save(){
+  if(!Object.keys(S.cart).length){alert("أضف صنفًا واحدًا على الأقل.");return}
+  S.orders.unshift({no:S.orders.length+1,name:S.f.name,phone:S.f.phone,addr:S.f.addr,pay:S.f.pay,total:tot(),s:0,items:Object.entries(S.cart).map(([k,q])=>q+"× "+IT[k].n)});
+  S.cart={};S.f={name:"",phone:"",addr:"",pay:"كاش"};R();
+}
+function adv(i){S.orders[i].s++;R()}
+setInterval(()=>{if(S.call=="connected"){S.t++;document.querySelectorAll(".tm").forEach(e=>e.textContent=fmt(S.t))}},1000);
+R();
+</script>
+</body>
+</html>
